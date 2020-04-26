@@ -223,11 +223,24 @@ input method at use."
         (inhibit-message t)
         ;; (ispell-lookup-words "-Fi")
         (word (yeis-current-word)))
-    (and
-     (and (>= (length word) 3) (<= (length word) 4))
-     (if current-input-method
-         (ispell-lookup-words word)
-       (not (ispell-lookup-words word))))))
+    (and (>= (length word) 3) (<= (length word) 4)
+         ;; this is hack. write a strip string method
+         (save-excursion
+           (re-search-backward "[^.,;:!?]" (1- (point)) t))
+         (if current-input-method
+             (ispell-lookup-words word)
+           (not (ispell-lookup-words word))))))
+
+(defun check-word ()
+  "test."
+  (let ((ispell-alternate-dictionary
+         "/home/aadcg/repos/yeis/wordlist")
+        (inhibit-message t)
+        ;; (ispell-look-p t)
+        (word (yeis-current-word)))
+    (if current-input-method
+        (string-equal word (car (ispell-lookup-words word)))
+      (not (string-equal word (car (ispell-lookup-words word)))))))
 
 (defun yeis-current-word ()
   "Return last word translated to the QWERTY layout as string.
@@ -253,9 +266,9 @@ Therefore \";tcnm\" (жесть) qualifies as a word."
   "Hook that decides wether or not to change last word."
   (let ((toggle-input-method-after-translation t)
         (inserted-whitespace-p (member (char-before) '(13 10 32))))
-    (when (and inserted-whitespace-p (length-one-rule))
-      (translate-current-word 1))
-    (unless inserted-whitespace-p
+    (if inserted-whitespace-p
+        (when (or (length-one-rule) (check-word))
+          (translate-current-word 1))
       (when (or (nonsense-word-p) (check-prefixed-word))
         (translate-current-word 1)))))
 
