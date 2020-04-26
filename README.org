@@ -1,0 +1,64 @@
+* Overview
+Yeis, pronounced yes, is a more advanced input method switcher for Emacs.
+
+It pretends to do two things:
+
+- Provide a simple way to correct inserted text to match an input method;
+
+- Provide the above automatically, i.e. without the user making the decision.
+  This is called yeips minor mode.
+
+Easier seen than read.
+
+<insert gif using screenkeys/xnee>
+
+Currently, the only input method supported is russian. However, the package was
+developed taking into account its expansibility to every non-CJK characted input
+method. If you want to understand why please read the X section below.
+
+* Quickstart
+
+#+begin_src sh
+cd foo-full-path
+git clone url
+#+end_src
+
+And then add the following to your init.el
+
+#+begin_src emacs-lisp
+(load-file "foo-full-path")
+(setq default-input-method "robin/russian")
+;; (setq-default robin-current-package-name "russian")
+(global-set-key (kbd "C-|") 'convert-last-word)
+#+end_src
+
+If you like use-package:
+
+MISSING
+
+* Rant about input methods
+
+If your way of life is to live inside of Emacs, then you know how annoying it is
+to selected an input method for your system (say, russian) and then you hit C-g
+and the minibuffer presents you with 'C-п is undefined'.
+
+Well, it is a fact that we can't (yet) do everything in Emacs. So, until the day
+of Emacs plenitude comes, we shall need to change the input method in the
+operating system you're running. However, from within Emacs, it's silly to have
+the input method from the operating system enabled (recall that annoying
+minibuffer I mentioned above). It's much better to set the input method for a
+given buffer so that you your keybindings, which are prepended with modifier
+keys, still get registered correctly. If you're enabling an input method on your
+operating system to insert multilingual text on Emacs, then you're doing it
+wrong. Emacs supports the insertion of multilingual text through quail.el. Quail
+is indeed a beautiful piece of software. However, it also inherits unnecessary
+complexity if you don't need input method for Japanese, Chinese or Korean.
+
+What I would like to know is how can I set up input methods changes such that
+they won't take effect inside of Emacs. If anyway knows that, I'd be very
+grateful. That could be achieved with ibus.
+
+https://github.com/a13/reverse-im.el
+https://xneur.ru
+emacs pkg fix-input
+https://kbdlayout.info
