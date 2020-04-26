@@ -163,8 +163,10 @@ the previous whitespace ARG times."
 ;; if the selected input method is flawed, then this is flawed
 ;; if current-input-method is ru and ";;"
 ;; I could check the last char if >127
-(defun translate-last-word (arg)
-  "Translate the last word to the other input method."
+(defun translate-current-word (arg)
+  "Translate the current word to the other input method.
+
+The current word is the word at or neat point."
   (interactive "p")
   (let ((beg (or (point-last-whitespace arg) (point-min)))
         (end (point)))
@@ -173,17 +175,6 @@ the previous whitespace ARG times."
       (robin-convert-region beg end))
     (when toggle-input-method-after-translation
       (toggle-input-method))))
-
-;; 13 return 10 newline 32 spc
-(defun rules ()
-  "Hook that decides wether or not to change last word."
-  (let ((toggle-input-method-after-translation t)
-        (inserted-whitespace-p (member (char-before) '(13 10 32))))
-    (when (and inserted-whitespace-p (length-one-rule))
-      (translate-last-word 1))
-    (unless inserted-whitespace-p
-      (when (or (nonsense-word-p) (check-prefixed-word))
-        (translate-last-word 1)))))
 
 (defun nonsense-word-p ()
   "
@@ -215,9 +206,7 @@ English has two words of length one - \"a\" and \"I\".
 
 The necessary translations are done, taking into account the
 input method at use."
-  (let ((word (if current-input-method
-                  (last-word-en)
-                (last-word))))
+  (let ((word (yeis-current-word)))
     (and
      (eq (length word) 1)
      (if current-input-method
@@ -233,35 +222,42 @@ input method at use."
          "/home/aadcg/repos/yeis/wordlist")
         (inhibit-message t)
         ;; (ispell-lookup-words "-Fi")
-        (word (if current-input-method
-                  (last-word-en)
-                (last-word))))
+        (word (yeis-current-word)))
     (and
      (and (>= (length word) 3) (<= (length word) 4))
      (if current-input-method
          (ispell-lookup-words word)
        (not (ispell-lookup-words word))))))
 
-(defun last-word-en ()
+(defun yeis-current-word ()
   "Return last word translated to the QWERTY layout as string.
 
 Recall that a word is something that is surrounded by whitespaces.
-Therefore \";tcnm\" (жесть) qualifies as a word."
-  (let ((beg (point-last-whitespace 1))
-        (end (point)))
-  (mapconcat
-   (lambda (x)
-     (get-char-code-property x (intern robin-current-package-name)))
-   (buffer-substring beg end) "")))
+Therefore \";tcnm\" (жесть) qualifies as a word.
 
-(defun last-word ()
-  "Return last word as string.
+Return last word as string.
 
 Recall that a word is something that is surrounded by whitespaces.
 Therefore \";tcnm\" (жесть) qualifies as a word."
   (let ((beg (point-last-whitespace 1))
         (end (point)))
-    (s-trim (buffer-substring beg end))))
+    (if current-input-method
+        (mapconcat
+         (lambda (x)
+           (get-char-code-property x (intern robin-current-package-name)))
+         (buffer-substring beg end) "")
+      (s-trim (buffer-substring beg end)))))
+
+;; 13 return 10 newline 32 spc
+(defun rules ()
+  "Hook that decides wether or not to change last word."
+  (let ((toggle-input-method-after-translation t)
+        (inserted-whitespace-p (member (char-before) '(13 10 32))))
+    (when (and inserted-whitespace-p (length-one-rule))
+      (translate-current-word 1))
+    (unless inserted-whitespace-p
+      (when (or (nonsense-word-p) (check-prefixed-word))
+        (translate-current-word 1)))))
 
 (define-minor-mode yeis-mode
   "Activate yeis-mode."
