@@ -42,6 +42,9 @@
 (defcustom toggle-input-method-after-translation t
   "Whether to toggle the input method after a translation.")
 
+(defvar nonsense-word-regex "[]}{[<>`~]\\|[.,;:][^ \n]"
+  "Regex that matches a nonsense word in English.")
+
 ;; useless
 ;; (add-hook 'input-method-activate-hook
 ;;           (lambda () (change-to-dict default-russian-dict)))
@@ -195,9 +198,8 @@ The current word is the word at or neat point."
 ;; A regex for '\" (эЭ) is missing.
 "
   (unless current-input-method
-    (let ((regex "[]}{[<>`~]\\|[.,;:][^ \n]"))
-      (save-excursion
-        (re-search-backward regex (point-last-whitespace 1) t)))))
+    (save-excursion
+      (re-search-backward nonsense-word-regex (point-last-whitespace 1) t))))
 
 (defun length-one-rule ()
   "Translates a word of length one.
@@ -214,6 +216,12 @@ input method at use."
          (or (equalp word "a") (equalp word "i"))
        (not (or (equalp word "a") (equalp word "i")))))))
 
+(defun strip-punctuation-marks (word)
+  "test."
+  (if (string-match "[.,;:!?]$" word)
+      (substring word 0 -1)
+    word))
+
 ;; TODO method to download wordlist
 ;; escape [ character when using grep
 (defun check-prefixed-word ()
@@ -221,26 +229,27 @@ input method at use."
   (let ((ispell-alternate-dictionary
          "/home/aadcg/repos/yeis/wordlist")
         (inhibit-message t)
-        ;; (ispell-lookup-words "-Fi")
+        ;; (ispell-look-p t)
         (word (yeis-current-word)))
-    (and (>= (length word) 3) (<= (length word) 4)
-         ;; this is hack. write a strip string method
-         (save-excursion
-           (re-search-backward "[^.,;:!?]" (1- (point)) t))
-         (if current-input-method
-             (ispell-lookup-words word)
-           (not (ispell-lookup-words word))))))
+    (and
+     ;; I don't like this here
+     (not (string-match nonsense-word-regex word))
+     (>= (length word) 3)
+     (<= (length word) 4)
+     (if current-input-method
+         (ispell-lookup-words word)
+       (not (ispell-lookup-words word))))))
 
 (defun check-word ()
   "test."
   (let ((ispell-alternate-dictionary
          "/home/aadcg/repos/yeis/wordlist")
         (inhibit-message t)
-        ;; (ispell-look-p t)
+        (ispell-look-p t)
         (word (yeis-current-word)))
     (if current-input-method
-        (string-equal word (car (ispell-lookup-words word)))
-      (not (string-equal word (car (ispell-lookup-words word)))))))
+        (string-equal (downcase word) (car (ispell-lookup-words word)))
+      (not (string-equal (downcase word) (car (ispell-lookup-words word)))))))
 
 (defun yeis-current-word ()
   "Return last word translated to the QWERTY layout as string.
@@ -252,14 +261,17 @@ Return last word as string.
 
 Recall that a word is something that is surrounded by whitespaces.
 Therefore \";tcnm\" (жесть) qualifies as a word."
-  (let ((beg (point-last-whitespace 1))
+  (let ((beg (or (point-last-whitespace 1) (point-min)))
         (end (point)))
     (if current-input-method
-        (mapconcat
-         (lambda (x)
-           (get-char-code-property x (intern robin-current-package-name)))
-         (buffer-substring beg end) "")
-      (s-trim (buffer-substring beg end)))))
+        (strip-punctuation-marks
+         (mapconcat
+          (lambda (x)
+            (get-char-code-property x (intern robin-current-package-name)))
+          (buffer-substring beg end) ""))
+      (strip-punctuation-marks
+       (s-trim
+        (buffer-substring beg end))))))
 
 ;; 13 return 10 newline 32 spc
 (defun rules ()
