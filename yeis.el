@@ -1,9 +1,9 @@
 ;;; yeis.el --- Yeis's Emacs' Input Switcher
 
-;; Copyright © 2020 André A Gomes <andremegafone@gmail.com>
+;; Copyright © 2020 André A. Gomes <andremegafone@gmail.com>
 
-;; Version: 0.0.1
-;; URL: https://github.com/?
+;; Version: 0.1
+;; URL: https://github.com/aadcg/emacs-yeis
 
 ;; Yeis is NOT part of GNU Emacs.
 
@@ -23,47 +23,32 @@
 ;;; Commentary:
 
 ;; Yeis's Emacs' Input Switcher. It should be pronounced as yes.
-;; It has two goals.
-;; 1) Provide an easy way to convert text to and from a given input method;
-;; 2) Provide a minor mode that makes that conversion automatically.
 
-;; http://www-personal.umich.edu/~jlawler/wordlist.html
-;; added i'm you're he's she's it's we're they're
+;; Two goals:
+
+;; 1) Translate text to and from a non-CJK IM on user's request;
+;; 2) Do the above automatically by activating yeis minor mode.
+
+;; Please note that IM stands for input method.
 
 ;;; Code:
 
 (require 'robin)
 (require 'ispell)
 
-(defcustom modeline-ru-identifier "RU"
-  "String to show in the mode line when the russian input method
-  is active.")
+(defvar modeline-ru-identifier "RU"
+  "Mode line IM string indicator.")
 
-(defcustom toggle-input-method-after-translation t
-  "Whether to toggle the input method after a translation.")
+(defvar toggle-input-method-after-translation t
+  "Whether to toggle the IM after a translation.")
 
-(defvar nonsense-word-regex "[]}{[<>`~]\\|[.,;:][^ \n]"
+(defvar yeis-nonsense-word-regex "[]}{[<>`~]\\|[.,;:][^ \n]"
   "Regex that matches a nonsense word in English.")
 
-;; useless
-;; (add-hook 'input-method-activate-hook
-;;           (lambda () (change-to-dict default-russian-dict)))
+(defvar yeis-path-plain-word-list nil
+  "Path for the plain english word-list.")
 
-;; (add-hook 'input-method-deactivate-hook
-;;           (lambda () (change-to-dict default-english-dict)))
-
-;; (defun change-to-dict (dict)
-;;   "Change to the dictionary given by string DICT."
-;;   (let ((inhibit-message t))
-;;     (ispell-change-dictionary dict)))
-
-;; (defvar default-russian-dict "ru"
-;;   "String that identifies the russian dictionary to use.")
-
-;; (defvar default-english-dict "en"
-;;   "String that identifies the english dictionary to use.")
-
-;; as the number of input methods grow, this should be moved to another file
+;; as the number of IMs grow, this should be moved to another file
 (robin-define-package "robin/russian"
 		      "ЙЦУКЕН Russian computer layout
 
@@ -72,13 +57,20 @@
       фФ  ыЫ  вВ  аА  пП  рР  оО  лЛ  дД  жЖ  эЭ
        яЯ  чЧ  сС  мМ  иИ  тТ  ьЬ  бБ  юЮ  .,"
 
+                      ("1" ?1)
+                      ("2" ?2)
+                      ("3" ?3)
+                      ("4" ?4)
+                      ("5" ?5)
+                      ("6" ?6)
+                      ("7" ?7)
+                      ("8" ?8)
+                      ("9" ?9)
+                      ("0" ?0)
+                      ("-" ?-)
+                      ("=" ?=)
+                      ("|" ?/)
                       ("`" ?ё)
-                      ("@" ?\")
-                      ("#" ?№)
-                      ("$" ?\;)
-                      ("^" ?:)
-                      ("&" ??)
-                      ("~" ?Ё)
                       ("q" ?й)
                       ("w" ?ц)
                       ("e" ?у)
@@ -91,6 +83,41 @@
                       ("p" ?з)
                       ("[" ?х)
                       ("]" ?ъ)
+                      ("a" ?ф)
+                      ("s" ?ы)
+                      ("d" ?в)
+                      ("f" ?а)
+                      ("g" ?п)
+                      ("h" ?р)
+                      ("j" ?о)
+                      ("k" ?л)
+                      ("l" ?д)
+                      (";" ?ж)
+                      ("'" ?э)
+                      ("\\" ?\\)
+                      ("z" ?я)
+                      ("x" ?ч)
+                      ("c" ?с)
+                      ("v" ?м)
+                      ("b" ?и)
+                      ("n" ?т)
+                      ("m" ?ь)
+                      ("," ?б)
+                      ("." ?ю)
+                      ("/" ?.)
+                      ("!" ?!)
+                      ("@" ?\")
+                      ("#" ?№)
+                      ("$" ?\;)
+                      ("%" ?%)
+                      ("^" ?:)
+                      ("&" ??)
+                      ("*" ?*)
+                      ("(" ?\()
+                      (")" ?\))
+                      ("_" ?_)
+                      ("+" ?+)
+                      ("~" ?Ё)
                       ("Q" ?Й)
                       ("W" ?Ц)
                       ("E" ?У)
@@ -103,18 +130,6 @@
                       ("P" ?З)
                       ("{" ?Х)
                       ("}" ?Ъ)
-                      ("|" ?/)
-                      ("a" ?ф)
-                      ("s" ?ы)
-                      ("d" ?в)
-                      ("f" ?а)
-                      ("g" ?п)
-                      ("h" ?р)
-                      ("j" ?о)
-                      ("k" ?л)
-                      ("l" ?д)
-                      (";" ?ж)
-                      ("'" ?э)
                       ("A" ?Ф)
                       ("S" ?Ы)
                       ("D" ?В)
@@ -126,16 +141,7 @@
                       ("L" ?Д)
                       (":" ?Ж)
                       ("\"" ?Э)
-                      ("z" ?я)
-                      ("x" ?ч)
-                      ("c" ?с)
-                      ("v" ?м)
-                      ("b" ?и)
-                      ("n" ?т)
-                      ("m" ?ь)
-                      ("," ?б)
-                      ("." ?ю)
-                      ("/" ?.)
+                      ("|" ?|)
                       ("Z" ?Я)
                       ("X" ?Ч)
                       ("C" ?С)
@@ -154,24 +160,28 @@
  modeline-ru-identifier
  "ЙЦУКЕН Russian computer layout")
 
-(defun point-last-whitespace (arg)
-  "Returns the point after the last whitespace.
+(defun yeis-last-whitespace (arg)
+  "Return the point of the last whitespace.
 
-With prefix argument ARG, returns the above after going back to
-the previous whitespace ARG times."
+With prefix argument ARG, do it ARG times."
   (let ((regex "[\n[:space:]][^[:space:]\n]"))
     (save-excursion
       (re-search-backward regex nil t arg))))
 
-;; if the selected input method is flawed, then this is flawed
-;; if current-input-method is ru and ";;"
-;; I could check the last char if >127
-(defun translate-current-word (arg)
-  "Translate the current word to the other input method.
+(defun yeis-translate-current-word (arg)
+  "Translate the current word to the other IM.
 
-The current word is the word at or neat point."
+Other IM means - if `current-input-method' is nil, then
+translate the current word to a non-nil `current-input-method',
+and vice-versa.
+
+The current word is the closest set of characters delimited by a
+whitespace character on the left.
+
+With prefix argument ARG, translate ARG words from cursor
+position."
   (interactive "p")
-  (let ((beg (or (point-last-whitespace arg) (point-min)))
+  (let ((beg (or (yeis-last-whitespace arg) (point-min)))
         (end (point)))
     (if current-input-method
         (robin-invert-region beg end)
@@ -179,35 +189,67 @@ The current word is the word at or neat point."
     (when toggle-input-method-after-translation
       (toggle-input-method))))
 
-(defun nonsense-word-p ()
-  "
-;; Check if last word contains only latin letters or numbers.
+;; The above suffices to achieve goal number one.
 
-;; Let's break the following regex down:
-;; []}{[<>`~]\\|[.,;:][^ \n]
+;; Users might find it useful to bind `yeis-translate-current-word' to "C-|".
+;; (global-set-key (kbd "C-|") 'yeis-translate-current-word)
 
-;; There are actually 2 regex pieces so let's analyze each one.
+;; If you want this functionality for a different IM, please read the
+;; section "How to define conversion rules" of the `robin' package.
 
-;; [.,;:][^ \n]
+;; What follows is a hacky suggestion to achieve goal number two.
 
-;; This part guarantees that a punction mark doesn't occur at the
-;; end of a word.
+;; If the user makes a typo while inserting an english word, then it gets
+;; translated. That reflects the alpha state of what you'll find below.
 
-;; [][{}<>\\|`~]
+(define-minor-mode yeis-mode
+  "Toggle automatic IM selection (Yeis mode)."
+  nil " Ye" nil
+  (if yeis-mode
+      (add-hook 'post-self-insert-hook #'yeis-rules nil t)
+    (remove-hook 'post-self-insert-hook #'yeis-rules t)))
 
-;; A regex for '\" (эЭ) is missing.
-"
+(defun yeis-rules ()
+  "Translate the word at point and change IM automatically.
+
+Conditions must be met to trigger `yeis-translate-current-word'.
+Namely, there are two kinds of rules. Some run after pressing RET
+or SPC. Others run otherwise."
+  (let ((toggle-input-method-after-translation t)
+        (inserted-whitespace-p (member (char-before) '(13 32))))
+    (if inserted-whitespace-p
+        (when (or (yeis-l1-p) (yeis-word-p))
+          (yeis-translate-current-word 1))
+      (when (or (yeis-nonsense-word-p) (yeis-prefix-p))
+        (yeis-translate-current-word 1)))))
+
+(defun yeis-nonsense-word-p ()
+  "Return t if current word is nonsense.
+
+The check only makes sense when no IM is selected. Nonsense means
+that there's a match for the regex `yeis-nonsense-word-regex'.
+That regex basically checks for the presence of characters that
+don't constitute a well-formed word in english.
+
+Let me provide some examples in the case of the traditional
+йцукен keyboard.
+
+[jhjij <-> хорошо
+k.,k.  <-> люблю
+;tcnm  <-> жесть"
   (unless current-input-method
     (save-excursion
-      (re-search-backward nonsense-word-regex (point-last-whitespace 1) t))))
+      (re-search-backward yeis-nonsense-word-regex (yeis-last-whitespace 1) t))))
 
-(defun length-one-rule ()
-  "Translates a word of length one.
+(defun yeis-l1-p ()
+  "Return t if the current word of length 1 requires translation.
 
-English has two words of length one - \"a\" and \"I\".
+English only has two words of length one - \"a\" and \"I\".
 
-The necessary translations are done, taking into account the
-input method at use."
+The necessary boolean is computed, taking into account the
+selected IM.
+
+It could be argued that there are other length 1 words like \"w\"."
   (let ((word (yeis-current-word)))
     (and
      (eq (length word) 1)
@@ -216,79 +258,80 @@ input method at use."
          (or (equalp word "a") (equalp word "i"))
        (not (or (equalp word "a") (equalp word "i")))))))
 
-(defun strip-punctuation-marks (word)
-  "test."
-  (if (string-match "[.,;:!?]$" word)
-      (substring word 0 -1)
-    word))
+(defun yeis-prefix-p ()
+  "Return t if the current prefix requires translation.
 
-;; TODO method to download wordlist
-;; escape [ character when using grep
-(defun check-prefixed-word ()
-  "Test."
-  (let ((ispell-alternate-dictionary
-         "/home/aadcg/repos/yeis/wordlist")
-        (inhibit-message t)
-        ;; (ispell-look-p t)
-        (word (yeis-current-word)))
+A prefix is a word of length between 3 and 4.
+
+The necessary boolean is computed, taking into account the
+selected IM."
+  (let ((inhibit-message t)
+        (word (yeis-current-word))
+        (wordlist yeis-path-plain-word-list))
     (and
-     ;; I don't like this here
-     (not (string-match nonsense-word-regex word))
      (>= (length word) 3)
      (<= (length word) 4)
+     (not (string-match yeis-nonsense-word-regex word))
      (if current-input-method
-         (ispell-lookup-words word)
-       (not (ispell-lookup-words word))))))
+         (ispell-lookup-words word wordlist)
+       (not (ispell-lookup-words word wordlist))))))
 
-(defun check-word ()
-  "test."
-  (let ((ispell-alternate-dictionary
-         "/home/aadcg/repos/yeis/wordlist")
-        (inhibit-message t)
-        (ispell-look-p t)
-        (word (yeis-current-word)))
-    (if current-input-method
-        (string-equal (downcase word) (car (ispell-lookup-words word)))
-      (not (string-equal (downcase word) (car (ispell-lookup-words word)))))))
+(defun yeis-word-p ()
+  "Return t if the current word requires translation.
+
+This is similar to `yeis-word-p', whereas in this method the
+boolean reflects the existence of a full word match."
+  (let ((inhibit-message t)
+        (word (downcase (yeis-current-word)))
+        (wordlist yeis-path-plain-word-list))
+    (and (>= (length word) 2)
+         (if current-input-method
+             (string-equal word (car (ispell-lookup-words word wordlist)))
+           (not (string-equal word (car (ispell-lookup-words word wordlist))))))))
 
 (defun yeis-current-word ()
-  "Return last word translated to the QWERTY layout as string.
+  "Return the current word as string, as it is without an IM selected.
 
-Recall that a word is something that is surrounded by whitespaces.
-Therefore \";tcnm\" (жесть) qualifies as a word.
+In short, regard the RULES of `robin-define-package' as a
+bijection. This method provides the inverse function when an IM
+is active.
 
-Return last word as string.
+When no IM is active, then the above is bypassed.
 
-Recall that a word is something that is surrounded by whitespaces.
-Therefore \";tcnm\" (жесть) qualifies as a word."
-  (let ((beg (or (point-last-whitespace 1) (point-min)))
+In either case, the word is stripped of punctuation for obvious
+reasons.
+
+Recall that a word, in the context of yeis, is a text string
+composed by any non-whitespace characters and delimited by
+whitespaces (or borders like the beginning/end of a buffer).
+
+Notice that this contrasts with the Emacs' definition of a word.
+
+Let me give you an example of a word that qualifies as such in
+the context of yeis, but not in the context of Emacs' definiton.
+
+Take \".kz\" (юля). Run `backward-word' with the cursor placed at
+the end of the following line.
+
+.kz"
+  (let ((beg (or (yeis-last-whitespace 1) (point-min)))
         (end (point)))
     (if current-input-method
-        (strip-punctuation-marks
+        (strip-punctuation
          (mapconcat
           (lambda (x)
             (get-char-code-property x (intern robin-current-package-name)))
           (buffer-substring beg end) ""))
-      (strip-punctuation-marks
+      (strip-punctuation
        (s-trim
         (buffer-substring beg end))))))
 
-;; 13 return 10 newline 32 spc
-(defun rules ()
-  "Hook that decides wether or not to change last word."
-  (let ((toggle-input-method-after-translation t)
-        (inserted-whitespace-p (member (char-before) '(13 10 32))))
-    (if inserted-whitespace-p
-        (when (or (length-one-rule) (check-word))
-          (translate-current-word 1))
-      (when (or (nonsense-word-p) (check-prefixed-word))
-        (translate-current-word 1)))))
+(defun strip-punctuation (word)
+  "Strip WORD from punctuation.
 
-(define-minor-mode yeis-mode
-  "Activate yeis-mode."
-  nil " Ye" nil
-  (if yeis-mode
-      (add-hook 'post-self-insert-hook #'rules nil t)
-    (remove-hook 'post-self-insert-hook #'rules t)))
+TODO extend this method to strip quotes"
+  (if (string-match "[.,;:!?]$" word)
+      (substring word 0 -1)
+    word))
 
 ;;; yeis.el ends here
