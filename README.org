@@ -1,20 +1,19 @@
 * Overview
 Yeis, pronounced yes, is a more advanced input method switcher for Emacs.
 
-It pretends to do two things:
+Two goals:
 
-- Provide a simple way to correct inserted text to match an input method;
-
-- Provide the above automatically, i.e. without the user making the decision.
-  This is called yeips minor mode.
+- Translate text to and from a non-CJK input method on user's request;
+- Do the above automatically by activating yeis minor mode.
 
 Easier seen than read.
 
 <insert gif using screenkeys/xnee>
 
-Currently, the only input method supported is russian. However, the package was
-developed taking into account its expansibility to every non-CJK characted input
-method. If you want to understand why please read the X section below.
+Currently, the only input method supported out of the box is russian. However,
+the package was developed taking into account its expansibility to every non-CJK
+characted input method. It is trivial to do it. If you want to understand why
+please read the X section below.
 
 * Quickstart
 
@@ -26,15 +25,21 @@ git clone url
 And then add the following to your init.el
 
 #+begin_src emacs-lisp
-(load-file "foo-full-path")
-(setq default-input-method "robin/russian")
-;; (setq-default robin-current-package-name "russian")
-(global-set-key (kbd "C-|") 'convert-last-word)
+  (load-file "foo-full-path")
+  (setq default-input-method "robin/russian"
+        yeis-path-plain-word-list "/home/aadcg/repos/yeis/wordlist")
+  (setq-default robin-current-package-name "robin/russian")
+  (global-set-key (kbd "C-|") 'translate-current-word)
 #+end_src
 
-If you like use-package:
+* Roadmap
 
-MISSING
+- Add more input methods;
+- Improve yeis minor mode.
+- write tests with most common words
+- write custom grep/look function
+- Integration with GNU Aspell (can it check if a certain prefix exists in a
+  given dictionary?)
 
 * Rant about input methods
 
@@ -62,3 +67,9 @@ https://github.com/a13/reverse-im.el
 https://xneur.ru
 emacs pkg fix-input
 https://kbdlayout.info
+
+* Thanks
+
+John Lawler for [[http://www-personal.umich.edu/~jlawler/wordlist.html][this english wordlist]].
+vlarya2 for [[https://pen4pals.com/en/10000-most-common-russian-words-spreadsheet][this russian wordlist]].
+Everyone at the Emacs (english) Telegram group.
