@@ -10,6 +10,8 @@ Easier seen than read.
 
 [[file:screenshot_manual.gif]]
 
+[[file:screenshot_yeismode.gif]]
+
 Currently, the only input method supported out of the box is russian. However,
 the package was developed taking into account its expansibility to every non-CJK
 characted input method. It is trivial to do it. If you want to understand why
