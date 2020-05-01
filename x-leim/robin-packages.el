@@ -1,0 +1,235 @@
+;; robin-packages.el --- Robin packages
+
+;; Copyright © 2020 André A. Gomes <andremegafone@gmail.com>
+
+;; This file is NOT part of GNU Emacs.
+
+;; This file is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This file is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; For a full copy of the GNU General Public License see
+;; <http://www.gnu.org/licenses/>.
+
+(robin-define-package "robin/russian"
+		      "ЙЦУКЕН Russian computer layout
+
+    1!  2@  3#  4$  5%  6^  7&  8*  9(  0)  -_  =+  `~
+     qQ  wW  eE  rR  tT  yY  uU  iI  oO  pP  [{  ]}  \\|
+      aA  sS  dD  fF  gG  hH  jJ  kK  lL  ;:  '\"
+       zZ  xX  cC  vV  bB  nN  mM  ,<  .>  /?
+
+    1!  2\"  3№  4;  5%  6:  7?  8*  9(  0)  -_  =+  ёЁ
+     йЙ  цЦ  уУ  кК  еЕ  нН  гГ  шШ  щЩ  зЗ  хХ  ъЪ  \\/
+      фФ  ыЫ  вВ  аА  пП  рР  оО  лЛ  дД  жЖ  эЭ
+       яЯ  чЧ  сС  мМ  иИ  тТ  ьЬ  бБ  юЮ  .,"
+
+                      ("1" ?1)
+                      ("2" ?2)
+                      ("3" ?3)
+                      ("4" ?4)
+                      ("5" ?5)
+                      ("6" ?6)
+                      ("7" ?7)
+                      ("8" ?8)
+                      ("9" ?9)
+                      ("0" ?0)
+                      ("-" ?-)
+                      ("=" ?=)
+                      ("|" ?/)
+                      ("`" ?ё)
+                      ("q" ?й)
+                      ("w" ?ц)
+                      ("e" ?у)
+                      ("r" ?к)
+                      ("t" ?е)
+                      ("y" ?н)
+                      ("u" ?г)
+                      ("i" ?ш)
+                      ("o" ?щ)
+                      ("p" ?з)
+                      ("[" ?х)
+                      ("]" ?ъ)
+                      ("a" ?ф)
+                      ("s" ?ы)
+                      ("d" ?в)
+                      ("f" ?а)
+                      ("g" ?п)
+                      ("h" ?р)
+                      ("j" ?о)
+                      ("k" ?л)
+                      ("l" ?д)
+                      (";" ?ж)
+                      ("'" ?э)
+                      ("\\" ?\\)
+                      ("z" ?я)
+                      ("x" ?ч)
+                      ("c" ?с)
+                      ("v" ?м)
+                      ("b" ?и)
+                      ("n" ?т)
+                      ("m" ?ь)
+                      ("," ?б)
+                      ("." ?ю)
+                      ("/" ?.)
+                      ("!" ?!)
+                      ("@" ?\")
+                      ("#" ?№)
+                      ("$" ?\;)
+                      ("%" ?%)
+                      ("^" ?:)
+                      ("&" ??)
+                      ("*" ?*)
+                      ("(" ?\()
+                      (")" ?\))
+                      ("_" ?_)
+                      ("+" ?+)
+                      ("~" ?Ё)
+                      ("Q" ?Й)
+                      ("W" ?Ц)
+                      ("E" ?У)
+                      ("R" ?К)
+                      ("T" ?Е)
+                      ("Y" ?Н)
+                      ("U" ?Г)
+                      ("I" ?Ш)
+                      ("O" ?Щ)
+                      ("P" ?З)
+                      ("{" ?Х)
+                      ("}" ?Ъ)
+                      ("A" ?Ф)
+                      ("S" ?Ы)
+                      ("D" ?В)
+                      ("F" ?А)
+                      ("G" ?П)
+                      ("H" ?Р)
+                      ("J" ?О)
+                      ("K" ?Л)
+                      ("L" ?Д)
+                      (":" ?Ж)
+                      ("\"" ?Э)
+                      ("|" ?|)
+                      ("Z" ?Я)
+                      ("X" ?Ч)
+                      ("C" ?С)
+                      ("V" ?М)
+                      ("B" ?И)
+                      ("N" ?Т)
+                      ("M" ?Ь)
+                      ("<" ?Б)
+                      (">" ?Ю)
+                      ("?" ?,))
+
+(robin-define-package "robin/russian-dvorak"
+		      "ЙЦУКЕН Russian Dvorak computer layout
+
+    1!  2@  3#  4$  5%  6^  7&  8*  9(  0)  [{  ]}  `~
+     '\"  ,<  .>  pP  yY  fF  gG  cC  rR  lL  /?  =+  \\|
+      aA  oO  eE  uU  iI  dD  hH  tT  nN  sS  -_
+        ;:  qQ  jJ  kK  xX  bB  mM  wW  vV zZ
+
+    1!  2\"  3№  4;  5%  6:  7?  8*  9(  0)  -_  =+  ёЁ
+     йЙ  цЦ  уУ  кК  еЕ  нН  гГ  шШ  щЩ  зЗ  хХ  ъЪ  \\/
+      фФ  ыЫ  вВ  аА  пП  рР  оО  лЛ  дД  жЖ  эЭ
+       яЯ  чЧ  сС  мМ  иИ  тТ  ьЬ  бБ  юЮ  .,"
+
+                      ("1" ?1)
+                      ("2" ?2)
+                      ("3" ?3)
+                      ("4" ?4)
+                      ("5" ?5)
+                      ("6" ?6)
+                      ("7" ?7)
+                      ("8" ?8)
+                      ("9" ?9)
+                      ("0" ?0)
+                      ("[" ?-)
+                      ("]" ?=)
+                      ("`" ?ё)
+                      ("'" ?й)
+                      ("," ?ц)
+                      ("." ?у)
+                      ("p" ?к)
+                      ("y" ?е)
+                      ("f" ?н)
+                      ("g" ?г)
+                      ("c" ?ш)
+                      ("r" ?щ)
+                      ("l" ?з)
+                      ("/" ?х)
+                      ("=" ?ъ)
+                      ("a" ?ф)
+                      ("o" ?ы)
+                      ("e" ?в)
+                      ("u" ?а)
+                      ("i" ?п)
+                      ("d" ?р)
+                      ("h" ?о)
+                      ("t" ?л)
+                      ("n" ?д)
+                      ("s" ?ж)
+                      ("-" ?э)
+                      ("\\" ?\\)
+                      (";" ?я)
+                      ("q" ?ч)
+                      ("j" ?с)
+                      ("k" ?м)
+                      ("x" ?и)
+                      ("b" ?т)
+                      ("m" ?ь)
+                      ("w" ?б)
+                      ("v" ?ю)
+                      ("z" ?.)
+                      ("!" ?!)
+                      ("@" ?\")
+                      ("#" ?№)
+                      ("$" ?\;)
+                      ("%" ?%)
+                      ("^" ?:)
+                      ("&" ??)
+                      ("*" ?*)
+                      ("(" ?\()
+                      (")" ?\))
+                      ("{" ?_)
+                      ("}" ?+)
+                      ("~" ?Ё)
+                      ("\"" ?Й)
+                      ("<" ?Ц)
+                      (">" ?У)
+                      ("P" ?К)
+                      ("Y" ?Е)
+                      ("F" ?Н)
+                      ("G" ?Г)
+                      ("C" ?Ш)
+                      ("R" ?Щ)
+                      ("L" ?З)
+                      ("?" ?Х)
+                      ("+" ?Ъ)
+                      ("A" ?Ф)
+                      ("O" ?Ы)
+                      ("E" ?В)
+                      ("U" ?А)
+                      ("I" ?П)
+                      ("D" ?Р)
+                      ("H" ?О)
+                      ("T" ?Л)
+                      ("N" ?Д)
+                      ("S" ?Ж)
+                      ("_" ?Э)
+                      ("|" ?|)
+                      (":" ?Я)
+                      ("Q" ?Ч)
+                      ("J" ?С)
+                      ("K" ?М)
+                      ("X" ?И)
+                      ("B" ?Т)
+                      ("M" ?Ь)
+                      ("W" ?Б)
+                      ("V" ?Ю)
+                      ("Z" ?,))
