@@ -17,7 +17,7 @@
 ;; For a full copy of the GNU General Public License see
 ;; <http://www.gnu.org/licenses/>.
 
-(robin-define-package "robin/russian"
+(robin-define-package "robin-russian"
 		      "ЙЦУКЕН Russian computer layout
 
     1!  2@  3#  4$  5%  6^  7&  8*  9(  0)  -_  =+  `~
@@ -126,7 +126,7 @@
                       (">" ?Ю)
                       ("?" ?,))
 
-(robin-define-package "robin/russian-dvorak"
+(robin-define-package "robin-russian-dvorak"
 		      "ЙЦУКЕН Russian Dvorak computer layout
 
     1!  2@  3#  4$  5%  6^  7&  8*  9(  0)  [{  ]}  `~
