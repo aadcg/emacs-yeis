@@ -24,10 +24,10 @@
 
 ;; Yeis's Emacs' Input Switcher. It should be pronounced as yes.
 
-;; Two goals:
+;; It pretends to:
 
-;; 1) Translate text to and from a non-CJK IM on user's request;
-;; 2) Do the above automatically by activating yeis minor mode.
+;; 1) Translate text to and from non-CJK input methods;
+;; 2) Auto translation and auto input method selection (yeis-mode).
 
 ;; Please note that IM stands for input method.
 

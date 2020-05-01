@@ -1,77 +1,108 @@
 * Overview
-Yeis, pronounced yes, is a more advanced input method switcher for Emacs.
 
-Two goals:
+*Yeis*, pronounced yes, is a more advanced input method switcher for Emacs.
 
-- Translate text to and from a non-CJK input method;
-- Do the above automatically by activating yeis minor mode.
+It pretends to:
 
-Easier seen than read.
+1) Translate text to and from non-CJK input methods;
+2) Auto translation and auto input method selection (yeis-mode).
 
-[[file:screenshot_manual.gif]]
+** Demo
 
-[[file:screenshot_yeismode.gif]]
+Let's see it in action, for the sake of clarity. I'll be demonstrating it with
+the russian input method selected (ЙЦУКЕН).
 
-Currently, the only input method supported out of the box is russian. However,
-the package was developed taking into account its expansibility to every non-CJK
-characted input method. It is trivial to do it. If you want to understand why
-please read the X section below.
+** Manual Translation
+
+Translate the current word, to one to the left of the cursor, by calling
+=translate-current-word=. You can either call it with M-x or you can set bind it
+to a key, such as C-| (see instructions below).
+
+When you pass a prefix argument n, it translates the last n words.
+
+The following commands are equivalent ways to translating 3 words that come
+before the cursor.
+
+M-3 C-|
+C-u 3 C-|
+
+Notice that you can always toggle your input method by calling
+=toggle-input-method= (C-\).
+
+[[file:screenshots/screenshot_manual.gif]]
+
+** Yeis-mode
+
+By activating yeis-mode, you'll get auto translation and auto input method
+selection. It follows a DWIM (do-what-I-mean) philosophy.
+
+Note that this is still under development, therefore unwanted behavior will
+certainly happen. You can always call =translate-current-word= to make the
+necessary corrections.
+
+[[file:screenshots/screenshot_yeismode.gif]]
 
 * Quickstart
 
 #+begin_src sh
-cd foo-full-path
-git clone url
+git clone https://github.com/aadcg/emacs-yeis.git
 #+end_src
 
-And then add the following to your init.el
+Add the following to your init.el:
 
 #+begin_src emacs-lisp
-  (load-file "foo-full-path")
+  (load-file "/fullpath/to/yeis.el")
   (setq default-input-method "robin/russian"
-        yeis-path-plain-word-list "/home/aadcg/repos/yeis/wordlist")
+        yeis-path-plain-word-list "/fullpath/to/wordlist/of/this/repo")
   (setq-default robin-current-package-name "robin/russian")
   (global-set-key (kbd "C-|") 'translate-current-word)
 #+end_src
 
 * Roadmap
 
-- Add more input methods;
-- Improve yeis minor mode.
-- write tests with most common words
-- write custom grep/look function
-- Integration with GNU Aspell (can it check if a certain prefix exists in a
+- Add support for more input methods out of the box (it's trivial, just ask!);
+- Improve yeis-mode (namely it should take into account that users can make
+  typos);
+- Write unit tests (following a property-based philosophy);
+- Write integration tests with the most common words;
+- Better integration with GNU Aspell (can it check if a certain prefix exists in a
   given dictionary?)
 
 * Rant about input methods
 
 If your way of life is to live inside of Emacs, then you know how annoying it is
-to selected an input method for your system (say, russian) and then you hit C-g
-and the minibuffer presents you with 'C-п is undefined'.
+when you select a non QWERTY input method in your OS. Say you have the russian
+input method active. Then you go to Emacs, you hit C-g and the minibuffer greets
+you with:
 
-Well, it is a fact that we can't (yet) do everything in Emacs. So, until the day
-of Emacs plenitude comes, we shall need to change the input method in the
-operating system you're running. However, from within Emacs, it's silly to have
-the input method from the operating system enabled (recall that annoying
-minibuffer I mentioned above). It's much better to set the input method for a
-given buffer so that you your keybindings, which are prepended with modifier
-keys, still get registered correctly. If you're enabling an input method on your
-operating system to insert multilingual text on Emacs, then you're doing it
-wrong. Emacs supports the insertion of multilingual text through quail.el. Quail
-is indeed a beautiful piece of software. However, it also inherits unnecessary
-complexity if you don't need input method for Japanese, Chinese or Korean.
+=C-п is undefined=
 
-What I would like to know is how can I set up input methods changes such that
-they won't take effect inside of Emacs. If anyway knows that, I'd be very
-grateful. That could be achieved with ibus.
+Emacs wants us to have a QWERTY input method enabled. When in need of another
+one, we should make use of its multilingual features (=M-x set-input-method=).
+That way, keybindings will still work since keypresses prefixed by Meta or
+Control are escaped (i.e. not translated). On the other hand, it is a fact that
+we can't (yet) do everything in Emacs. So, until that day of plenitude comes, we
+shall need to change the input method in the operating system we're running (say
+you want to write in Russian in your browser). A possible solution is to use
+IBus (the default input method framework for GNOME). Out of the box, you get
+input methods selected per application. Sweet! Some people have totally
+different approaches - take a look at [[https://github.com/a13/reverse-im.el][reverse-im]] and [[https://github.com/mrkkrp/fix-input][fix-input]]. I shall not even
+go in there.
 
-https://github.com/a13/reverse-im.el
-https://xneur.ru
-emacs pkg fix-input
-https://kbdlayout.info
+Let's now talk about input methods within Emacs. It supports insertion of
+multilingual text through Quail (have a look at quail.el) - indeed, a beautiful
+piece of software, but it inherits unnecessary complexity when the users don't
+use a CJK input method. I found out is that there's a lighter alternative to
+Quail - Robin. The latter, provides translation to and from any (non-CJK) input
+method out of the box!
+
+What Yeis wants to achieve within Emacs might be comparable to what [[https://xneur.ru][xneur]]
+achieves for GNU/Linux.
 
 * Thanks
 
 John Lawler for [[http://www-personal.umich.edu/~jlawler/wordlist.html][this english wordlist]].
+
 vlarya2 for [[https://pen4pals.com/en/10000-most-common-russian-words-spreadsheet][this russian wordlist]].
+
 Everyone at the Emacs (english) Telegram group.
