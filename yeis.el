@@ -27,7 +27,7 @@
 ;; It pretends to:
 
 ;; 1) Translate text to and from non-CJK input methods;
-;; 2) Auto translation and auto input method selection (yeis-mode).
+;; 2) Auto translate and auto select input methods (yeis-mode).
 
 ;; Please note that IM stands for input method.
 

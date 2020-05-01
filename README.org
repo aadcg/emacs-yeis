@@ -5,7 +5,7 @@
 It pretends to:
 
 1) Translate text to and from non-CJK input methods;
-2) Auto translation and auto input method selection (yeis-mode).
+2) Auto translate and auto select input methods (yeis-mode).
 
 ** Demo
 
@@ -55,7 +55,7 @@ Add the following to your init.el:
   (setq default-input-method "robin/russian"
         yeis-path-plain-word-list "/fullpath/to/wordlist/of/this/repo")
   (setq-default robin-current-package-name "robin/russian")
-  (global-set-key (kbd "C-|") 'translate-current-word)
+  (global-set-key (kbd "C-|") 'yeis-translate-current-word)
 #+end_src
 
 * Roadmap
