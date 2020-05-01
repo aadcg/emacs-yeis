@@ -23,8 +23,8 @@ When you pass a prefix argument n, it translates the last n words.
 The following commands are equivalent ways to translating 3 words that come
 before the cursor.
 
-M-3 C-|
-C-u 3 C-|
+- M-3 C-|
+- C-u 3 C-|
 
 Notice that you can always toggle your input method by calling
 =toggle-input-method= (C-\).
