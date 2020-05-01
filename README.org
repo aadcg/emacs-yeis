@@ -3,12 +3,12 @@ Yeis, pronounced yes, is a more advanced input method switcher for Emacs.
 
 Two goals:
 
-- Translate text to and from a non-CJK input method on user's request;
+- Translate text to and from a non-CJK input method;
 - Do the above automatically by activating yeis minor mode.
 
 Easier seen than read.
 
-<insert gif using screenkeys/xnee>
+[[file:screenshot_manual.gif]]
 
 Currently, the only input method supported out of the box is russian. However,
 the package was developed taking into account its expansibility to every non-CJK
