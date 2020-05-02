@@ -29,3 +29,10 @@
  'robin-use-package
  modeline-ru-identifier
  "Workman - ЙЦУКЕН Russian computer layout")
+
+(register-input-method
+ "robin-greek"
+ "Greek"
+ 'robin-use-package
+ "Ω"
+ "Ελληνικά: Greek keyboard layout (ISO 8859-7)")
