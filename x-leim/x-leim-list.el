@@ -14,11 +14,18 @@
  "Russian"
  'robin-use-package
  modeline-ru-identifier
- "ЙЦУКЕН Russian computer layout")
+ "US - ЙЦУКЕН Russian computer layout")
 
 (register-input-method
  "robin-russian-dvorak"
  "Russian Dvorak"
  'robin-use-package
  modeline-ru-identifier
- "ЙЦУКЕН Russian Dvorak computer layout")
+ "Dvorak - ЙЦУКЕН Russian computer layout")
+
+(register-input-method
+ "robin-russian-workman"
+ "Russian Workman"
+ 'robin-use-package
+ modeline-ru-identifier
+ "Workman - ЙЦУКЕН Russian computer layout")
