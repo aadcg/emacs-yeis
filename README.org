@@ -15,7 +15,7 @@ the russian input method selected (ЙЦУКЕН).
 ** Manual Translation
 
 Translate the current word, to one to the left of the cursor, by calling
-=translate-current-word=. You can either call it with M-x or you can set bind it
+=yeis-translate-current-word=. You can either call it with M-x or you can set bind it
 to a key, such as C-| (see instructions below).
 
 When you pass a prefix argument n, it translates the last n words.
@@ -67,13 +67,26 @@ Add the following to your init.el:
   ;; this is necessary if you want to use yeis minor mode
   (setq yeis-path-plain-word-list "/fullpath/to/wordlist/of/this/repo")
 
-  ;; since C-\ is bind to `toggle-input-method' this seems a good choice
+  ;; since C-\ is bind to `toggle-input-method', this seems a good choice
   (global-set-key (kbd "C-|") 'yeis-translate-current-word)
 #+end_src
 
+* Input methods
+
+At the moment the following input methods are supported:
+
+1) US QWERTY <-> russian ЙЦУКЕН
+2) US dvorak <-> russian ЙЦУКЕН
+
+It's trivial to add more. Let me know about your needs or, better yet, send me a
+patch.
+
+/Please note that I have only tested yeis-mode for the first one on the above
+list./
+
 * Roadmap
 
-- Add support for more input methods out of the box (it's trivial, just ask!);
+- Add support for more input methods out of the box (trivial task);
 - Improve yeis-mode (namely it should take into account that users can make
   typos);
 - Write unit tests (following a property-based philosophy);
