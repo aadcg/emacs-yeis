@@ -7,8 +7,7 @@
 ;;
 ;; Have a look at the function ‘register-input-method’ for more info.
 ;;
-;; If this directory is included in ‘load-path’, then the following
-;; additional input methods will be loaded at startup time.
+;; The following additional input methods will be loaded at startup time.
 
 (register-input-method
  "robin-russian"

@@ -51,10 +51,23 @@ git clone https://github.com/aadcg/emacs-yeis.git
 Add the following to your init.el:
 
 #+begin_src emacs-lisp
+  ;; yeis main file
   (load-file "/fullpath/to/yeis.el")
-  (setq default-input-method "robin/russian"
-        yeis-path-plain-word-list "/fullpath/to/wordlist/of/this/repo")
-  (setq-default robin-current-package-name "robin/russian")
+
+  ;; input methods' definitions
+  (load-file "/fullpath/to/robin-packages.el")
+
+  ;; loads the defined input methods
+  (load-file "/fullpath/to/x-leim-list.el")
+
+  ;; activate the desired input method, for instance robin-russian
+  (setq default-input-method "robin-russian")
+  (setq-default robin-current-package-name "robin-russian")
+
+  ;; this is necessary if you want to use yeis minor mode
+  (setq yeis-path-plain-word-list "/fullpath/to/wordlist/of/this/repo")
+
+  ;; since C-\ is bind to `toggle-input-method' this seems a good choice
   (global-set-key (kbd "C-|") 'yeis-translate-current-word)
 #+end_src
 
