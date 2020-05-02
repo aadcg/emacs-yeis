@@ -75,8 +75,10 @@ Add the following to your init.el:
 
 At the moment the following input methods are supported:
 
-1) US QWERTY <-> russian ЙЦУКЕН
+1) US qwerty <-> russian ЙЦУКЕН
 2) US dvorak <-> russian ЙЦУКЕН
+3) US workman <-> russian ЙЦУКЕН
+4) US querty <-> Greek
 
 It's trivial to add more. Let me know about your needs or, better yet, send me a
 patch.
