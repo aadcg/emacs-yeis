@@ -4,8 +4,8 @@
 
 It pretends to:
 
-1) Translate text to and from non-CJK input methods;
-2) Auto translate and auto select input methods (yeis-mode).
+1) Transform text as if it had been inserted by any non-CJK input method;
+2) Auto set the input method and auto transform text as it's typed (yeis-mode);
 
 ** Demo
 
@@ -14,11 +14,11 @@ the russian input method selected (ЙЦУКЕН).
 
 ** Manual Translation
 
-Translate the current word, to one to the left of the cursor, by calling
-=yeis-translate-current-word=. You can either call it with M-x or you can set bind it
-to a key, such as C-| (see instructions below).
+Transform the previous word, the one to the left of the cursor, by calling
+=yeis-transform-previous-word=. You can either call it with M-x or you can set
+bind it to a key, such as C-| (see instructions below).
 
-When you pass a prefix argument n, it translates the last n words.
+When you pass a prefix argument n, it transforms the last n words.
 
 The following commands are equivalent ways to translating 3 words that come
 before the cursor.
@@ -27,7 +27,7 @@ before the cursor.
 - C-u 3 C-|
 
 Notice that you can always toggle your input method by calling
-=toggle-input-method= (C-\).
+=toggle-input-method= (the default keybinding is C-\).
 
 [[file:screenshots/screenshot_manual.gif]]
 
@@ -37,7 +37,7 @@ By activating yeis-mode, you'll get auto translation and auto input method
 selection. It follows a DWIM (do-what-I-mean) philosophy.
 
 Note that this is still under development, therefore unwanted behavior will
-certainly happen. You can always call =translate-current-word= to make the
+certainly happen. You can always call =yeis-transform-previous-word= to make the
 necessary corrections.
 
 [[file:screenshots/screenshot_yeismode.gif]]
@@ -48,7 +48,10 @@ necessary corrections.
 git clone https://github.com/aadcg/emacs-yeis.git
 #+end_src
 
-Add the following to your init.el:
+Please find in the table below the string that identifies the input method you
+want to use.
+
+Here's what you need to add to your init.el:
 
 #+begin_src emacs-lisp
   ;; yeis main file
@@ -68,17 +71,19 @@ Add the following to your init.el:
   (setq yeis-path-plain-word-list "/fullpath/to/wordlist/of/this/repo")
 
   ;; since C-\ is bind to `toggle-input-method', this seems a good choice
-  (global-set-key (kbd "C-|") 'yeis-translate-current-word)
+  (global-set-key (kbd "C-|") 'yeis-transform-previous-word)
 #+end_src
 
 * Input methods
 
 At the moment the following input methods are supported:
 
-1) US qwerty <-> russian ЙЦУКЕН
-2) US dvorak <-> russian ЙЦУКЕН
-3) US workman <-> russian ЙЦУКЕН
-4) US querty <-> Greek
+| Name                  | Description                   |
+|-----------------------+-------------------------------|
+| robin-russian         | US qwerty <-> russian ЙЦУКЕН  |
+| robin-russian-dvorak  | US dvorak <-> russian ЙЦУКЕН  |
+| robin-russian-workman | US workman <-> russian ЙЦУКЕН |
+| robin-greek           | US querty <-> Greek           |
 
 It's trivial to add more. Let me know about your needs or, better yet, send me a
 patch.
@@ -108,7 +113,7 @@ you with:
 Emacs wants us to have a QWERTY input method enabled. When in need of another
 one, we should make use of its multilingual features (=M-x set-input-method=).
 That way, keybindings will still work since keypresses prefixed by Meta or
-Control are escaped (i.e. not translated). On the other hand, it is a fact that
+Control are escaped (i.e. not transformed). On the other hand, it is a fact that
 we can't (yet) do everything in Emacs. So, until that day of plenitude comes, we
 shall need to change the input method in the operating system we're running (say
 you want to write in Russian in your browser). A possible solution is to use
