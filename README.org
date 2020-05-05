@@ -12,7 +12,7 @@ It pretends to:
 Let's see it in action, for the sake of clarity. I'll be demonstrating it with
 the russian input method selected (ЙЦУКЕН).
 
-** Manual Translation
+** Manual Transformation
 
 Transform the previous word, the one to the left of the cursor, by calling
 =yeis-transform-previous-word=. You can either call it with M-x or you can set
@@ -20,7 +20,7 @@ bind it to a key, such as C-| (see instructions below).
 
 When you pass a prefix argument n, it transforms the last n words.
 
-The following commands are equivalent ways to translating 3 words that come
+The following commands are equivalent ways to transforming 3 words that come
 before the cursor.
 
 - M-3 C-|
@@ -33,7 +33,7 @@ Notice that you can always toggle your input method by calling
 
 ** Yeis-mode
 
-By activating yeis-mode, you'll get auto translation and auto input method
+By activating yeis-mode, you'll get auto transformation and auto input method
 selection. It follows a DWIM (do-what-I-mean) philosophy.
 
 Note that this is still under development, therefore unwanted behavior will
@@ -126,8 +126,8 @@ Let's now talk about input methods within Emacs. It supports insertion of
 multilingual text through Quail (have a look at quail.el) - indeed, a beautiful
 piece of software, but it inherits unnecessary complexity when the users don't
 use a CJK input method. I found out is that there's a lighter alternative to
-Quail - Robin. The latter, provides translation to and from any (non-CJK) input
-method out of the box!
+Quail - Robin. The latter, provides transformation to and from any (non-CJK)
+input method out of the box!
 
 What Yeis wants to achieve within Emacs might be comparable to what [[https://xneur.ru][xneur]]
 achieves for GNU/Linux.
