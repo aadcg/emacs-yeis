@@ -9,25 +9,28 @@
 ;;
 ;; The following additional input methods will be loaded at startup time.
 
+(defvar yeis-modeline-ru-identifier "RU"
+  "Mode line IM string indicator.")
+
 (register-input-method
  "robin-russian"
  "Russian"
  'robin-use-package
- modeline-ru-identifier
+ yeis-modeline-ru-identifier
  "US - ЙЦУКЕН Russian computer layout")
 
 (register-input-method
  "robin-russian-dvorak"
  "Russian Dvorak"
  'robin-use-package
- modeline-ru-identifier
+ yeis-modeline-ru-identifier
  "Dvorak - ЙЦУКЕН Russian computer layout")
 
 (register-input-method
  "robin-russian-workman"
  "Russian Workman"
  'robin-use-package
- modeline-ru-identifier
+ yeis-modeline-ru-identifier
  "Workman - ЙЦУКЕН Russian computer layout")
 
 (register-input-method
