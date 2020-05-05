@@ -26,8 +26,9 @@
 
 ;; It pretends to:
 
-;; 1) Translate text to and from non-CJK input methods;
-;; 2) Auto translate and auto select input methods (yeis-mode).
+;; 1) Transform text as if it had been inserted by any non-CJK input method;
+;; 2) Auto set the input method and auto transform text as it's typed
+;; (yeis-mode);
 
 ;; Please note that IM stands for input method.
 
@@ -56,17 +57,17 @@ With prefix argument ARG, do it ARG times."
     (save-excursion
       (re-search-backward regex nil t arg))))
 
-(defun yeis-translate-current-word (arg)
-  "Translate the current word to the other IM.
+(defun yeis-transform-previous-word (arg)
+  "Transform the previous word to the other IM.
 
 Other IM means - if `current-input-method' is nil, then
-translate the current word to a non-nil `current-input-method',
+transform the previous word to a non-nil `current-input-method',
 and vice-versa.
 
-The current word is the closest set of characters delimited by a
+The previous word is the closest set of characters delimited by a
 whitespace character on the left.
 
-With prefix argument ARG, translate ARG words from cursor
+With prefix argument ARG, transform ARG words from cursor
 position."
   (interactive "p")
   (let ((beg (or (yeis-last-whitespace arg) (point-min)))
@@ -79,8 +80,8 @@ position."
 
 ;; The above suffices to achieve goal number one.
 
-;; Users might find it useful to bind `yeis-translate-current-word' to "C-|".
-;; (global-set-key (kbd "C-|") 'yeis-translate-current-word)
+;; Users might find it useful to bind `yeis-transform-previous-word' to "C-|".
+;; (global-set-key (kbd "C-|") 'yeis-transform-previous-word)
 
 ;; If you want this functionality for a different IM, please read the
 ;; section "How to define conversion rules" of the `robin' package.
@@ -88,7 +89,7 @@ position."
 ;; What follows is a hacky suggestion to achieve goal number two.
 
 ;; If the user makes a typo while inserting an english word, then it gets
-;; translated. That reflects the alpha state of what you'll find below.
+;; transformed. That reflects the alpha state of what you'll find below.
 
 (define-minor-mode yeis-mode
   "Toggle automatic IM selection (Yeis mode)."
@@ -98,21 +99,21 @@ position."
     (remove-hook 'post-self-insert-hook #'yeis-rules t)))
 
 (defun yeis-rules ()
-  "Translate the word at point and change IM automatically.
+  "Transform the word at point and change IM automatically.
 
-Conditions must be met to trigger `yeis-translate-current-word'.
+Conditions must be met to trigger `yeis-transform-previous-word'.
 Namely, there are two kinds of rules. Some run after pressing RET
 or SPC. Others run otherwise."
   (let ((toggle-input-method-after-translation t)
         (inserted-whitespace-p (member (char-before) '(13 32))))
     (if inserted-whitespace-p
         (when (or (yeis-l1-p) (yeis-word-p))
-          (yeis-translate-current-word 1))
+          (yeis-transform-previous-word 1))
       (when (or (yeis-nonsense-word-p) (yeis-prefix-p))
-        (yeis-translate-current-word 1)))))
+        (yeis-transform-previous-word 1)))))
 
 (defun yeis-nonsense-word-p ()
-  "Return t if current word is nonsense.
+  "Return t if previous word is nonsense.
 
 The check only makes sense when no IM is selected. Nonsense means
 that there's a match for the regex `yeis-nonsense-word-regex'.
@@ -130,7 +131,7 @@ k.,k.  <-> люблю
       (re-search-backward yeis-nonsense-word-regex (yeis-last-whitespace 1) t))))
 
 (defun yeis-l1-p ()
-  "Return t if the current word of length 1 requires translation.
+  "Return t if the previous word of length 1 requires translation.
 
 English only has two words of length one - \"a\" and \"I\".
 
@@ -138,7 +139,7 @@ The necessary boolean is computed, taking into account the
 selected IM.
 
 It could be argued that there are other length 1 words like \"w\"."
-  (let ((word (yeis-current-word)))
+  (let ((word (yeis-previous-word)))
     (and
      (eq (length word) 1)
      (if current-input-method
@@ -147,14 +148,14 @@ It could be argued that there are other length 1 words like \"w\"."
        (not (or (equalp word "a") (equalp word "i")))))))
 
 (defun yeis-prefix-p ()
-  "Return t if the current prefix requires translation.
+  "Return t if the previous prefix requires translation.
 
 A prefix is a word of length between 3 and 4.
 
 The necessary boolean is computed, taking into account the
 selected IM."
   (let ((inhibit-message t)
-        (word (yeis-current-word))
+        (word (yeis-previous-word))
         (wordlist yeis-path-plain-word-list))
     (and
      (>= (length word) 3)
@@ -165,20 +166,20 @@ selected IM."
        (not (ispell-lookup-words word wordlist))))))
 
 (defun yeis-word-p ()
-  "Return t if the current word requires translation.
+  "Return t if the previous word requires translation.
 
 This is similar to `yeis-word-p', whereas in this method the
 boolean reflects the existence of a full word match."
   (let ((inhibit-message t)
-        (word (downcase (yeis-current-word)))
+        (word (downcase (yeis-previous-word)))
         (wordlist yeis-path-plain-word-list))
     (and (>= (length word) 2)
          (if current-input-method
              (string-equal word (car (ispell-lookup-words word wordlist)))
            (not (string-equal word (car (ispell-lookup-words word wordlist))))))))
 
-(defun yeis-current-word ()
-  "Return the current word as string, as it is without an IM selected.
+(defun yeis-previous-word ()
+  "Return the previous word as string, as it is without an IM selected.
 
 In short, regard the RULES of `robin-define-package' as a
 bijection. This method provides the inverse function when an IM
