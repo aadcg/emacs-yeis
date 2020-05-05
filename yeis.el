@@ -36,11 +36,9 @@
 
 (require 'robin)
 (require 'ispell)
+(require 's)                            ; due to s-trim
 
-(defvar modeline-ru-identifier "RU"
-  "Mode line IM string indicator.")
-
-(defvar toggle-input-method-after-translation t
+(defvar yeis-toggle-input-method-after-translation t
   "Whether to toggle the IM after a translation.")
 
 (defvar yeis-nonsense-word-regex "[]}{[<>`~]\\|[.,;:][^ \n]"
@@ -75,7 +73,7 @@ position."
     (if current-input-method
         (robin-invert-region beg end)
       (robin-convert-region beg end))
-    (when toggle-input-method-after-translation
+    (when yeis-toggle-input-method-after-translation
       (toggle-input-method))))
 
 ;; The above suffices to achieve goal number one.
@@ -104,7 +102,7 @@ position."
 Conditions must be met to trigger `yeis-transform-previous-word'.
 Namely, there are two kinds of rules. Some run after pressing RET
 or SPC. Others run otherwise."
-  (let ((toggle-input-method-after-translation t)
+  (let ((yeis-toggle-input-method-after-translation t)
         (inserted-whitespace-p (member (char-before) '(13 32))))
     (if inserted-whitespace-p
         (when (or (yeis-l1-p) (yeis-word-p))
@@ -139,13 +137,13 @@ The necessary boolean is computed, taking into account the
 selected IM.
 
 It could be argued that there are other length 1 words like \"w\"."
-  (let ((word (yeis-previous-word)))
+  (let ((word (downcase (yeis-previous-word))))
     (and
      (eq (length word) 1)
      (if current-input-method
          ;; "a" before "i" since it is more common in English
-         (or (equalp word "a") (equalp word "i"))
-       (not (or (equalp word "a") (equalp word "i")))))))
+         (or (string-equal word "a") (string-equal word "i"))
+       (not (or (string-equal word "a") (string-equal word "i")))))))
 
 (defun yeis-prefix-p ()
   "Return t if the previous prefix requires translation.
@@ -206,21 +204,23 @@ the end of the following line.
   (let ((beg (or (yeis-last-whitespace 1) (point-min)))
         (end (point)))
     (if current-input-method
-        (strip-punctuation
+        (yeis-strip-punctuation
          (mapconcat
           (lambda (x)
             (get-char-code-property x (intern robin-current-package-name)))
           (buffer-substring beg end) ""))
-      (strip-punctuation
+      (yeis-strip-punctuation
        (s-trim
         (buffer-substring beg end))))))
 
-(defun strip-punctuation (word)
+(defun yeis-strip-punctuation (word)
   "Strip WORD from punctuation.
 
 TODO extend this method to strip quotes"
   (if (string-match "[.,;:!?]$" word)
       (substring word 0 -1)
     word))
+
+(provide 'yeis)
 
 ;;; yeis.el ends here
