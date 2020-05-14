@@ -29,7 +29,7 @@ before the cursor.
 Notice that you can always toggle your input method by calling
 =toggle-input-method= (the default keybinding is C-\).
 
-[[file:screenshots/screenshot_manual.gif]]
+[[file:screenshots/manual.gif]]
 
 ** Yeis-mode
 
@@ -40,7 +40,7 @@ Note that this is still under development, therefore unwanted behavior will
 certainly happen. You can always call =yeis-transform-previous-word= to make the
 necessary corrections.
 
-[[file:screenshots/screenshot_yeismode.gif]]
+[[file:screenshots/yeismode.gif]]
 
 * Quickstart
 
