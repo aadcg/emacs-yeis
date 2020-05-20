@@ -14,7 +14,7 @@
 
 ;; Yeis is distributed in the hope that it will be useful, but WITHOUT
 ;; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-;; FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+;; FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
 ;; for more details.
 
 ;; For a full copy of the GNU General Public License see
@@ -22,7 +22,7 @@
 
 ;;; Commentary:
 
-;; Yeis's Emacs' Input Switcher. It should be pronounced as yes.
+;; Yeis's Emacs' Input Switcher.  It should be pronounced as yes.
 
 ;; It pretends to:
 
@@ -87,7 +87,7 @@ position."
 ;; What follows is a hacky suggestion to achieve goal number two.
 
 ;; If the user makes a typo while inserting an english word, then it gets
-;; transformed. That reflects the alpha state of what you'll find below.
+;; transformed.  That reflects the alpha state of what you'll find below.
 
 (define-minor-mode yeis-mode
   "Toggle automatic IM selection (Yeis mode)."
@@ -100,8 +100,8 @@ position."
   "Transform the word at point and change IM automatically.
 
 Conditions must be met to trigger `yeis-transform-previous-word'.
-Namely, there are two kinds of rules. Some run after pressing RET
-or SPC. Others run otherwise."
+Namely, there are two kinds of rules.  Some run after pressing RET
+or SPC.  Others run otherwise."
   (let ((yeis-toggle-input-method-after-translation t)
         (inserted-whitespace-p (member (char-before) '(13 32))))
     (if inserted-whitespace-p
@@ -113,7 +113,7 @@ or SPC. Others run otherwise."
 (defun yeis-nonsense-word-p ()
   "Return t if previous word is nonsense.
 
-The check only makes sense when no IM is selected. Nonsense means
+The check only makes sense when no IM is selected.  Nonsense means
 that there's a match for the regex `yeis-nonsense-word-regex'.
 That regex basically checks for the presence of characters that
 don't constitute a well-formed word in english.
@@ -180,7 +180,7 @@ boolean reflects the existence of a full word match."
   "Return the previous word as string, as it is without an IM selected.
 
 In short, regard the RULES of `robin-define-package' as a
-bijection. This method provides the inverse function when an IM
+bijection.  This method provides the inverse function when an IM
 is active.
 
 When no IM is active, then the above is bypassed.
@@ -197,7 +197,7 @@ Notice that this contrasts with the Emacs' definition of a word.
 Let me give you an example of a word that qualifies as such in
 the context of yeis, but not in the context of Emacs' definiton.
 
-Take \".kz\" (юля). Run `backward-word' with the cursor placed at
+Take \".kz\" (юля).  Run `backward-word' with the cursor placed at
 the end of the following line.
 
 .kz"
