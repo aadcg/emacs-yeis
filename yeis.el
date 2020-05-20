@@ -2,7 +2,7 @@
 
 ;; Copyright © 2020 André A. Gomes <andremegafone@gmail.com>
 
-;; Version: 0.1
+;; Version: 0.0.1
 ;; URL: https://github.com/aadcg/emacs-yeis
 
 ;; Yeis is NOT part of GNU Emacs.
@@ -208,10 +208,10 @@ the end of the following line.
          (mapconcat
           (lambda (x)
             (get-char-code-property x (intern robin-current-package-name)))
-          (buffer-substring beg end) ""))
+          (buffer-substring-no-properties beg end) ""))
       (yeis-strip-punctuation
        (s-trim
-        (buffer-substring beg end))))))
+        (buffer-substring-no-properties beg end))))))
 
 (defun yeis-strip-punctuation (word)
   "Strip WORD from punctuation.
