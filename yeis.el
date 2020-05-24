@@ -62,14 +62,21 @@ Other IM means - if `current-input-method' is nil, then
 transform the previous word to a non-nil `current-input-method',
 and vice-versa.
 
-The previous word is the closest set of characters delimited by a
-whitespace character on the left.
+The previous word is the set of characters bounded by a
+whitespace on the left.  The reference point is the cursor
+position.
 
-With prefix argument ARG, transform ARG words from cursor
-position."
+With prefix argument ARG, transform ARG words from the cursor
+position.
+
+The transformation acts on the region active, in case it exists."
   (interactive "p")
-  (let ((beg (or (yeis-last-whitespace arg) (point-min)))
-        (end (point)))
+  (let ((beg (if (region-active-p)
+                 (region-beginning)
+               (or (yeis-last-whitespace arg) (point-min))))
+        (end (if (region-active-p)
+                 (region-end)
+               (point))))
     (if current-input-method
         (robin-invert-region beg end)
       (robin-convert-region beg end))
