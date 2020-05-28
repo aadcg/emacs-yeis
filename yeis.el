@@ -1,4 +1,4 @@
-;;; yeis.el --- Yeis's Emacs' Input Switcher
+;;; yeis.el --- Yeis's Emacs' Input Switcher  -*- lexical-binding: t; -*-
 
 ;; Copyright © 2020 André A. Gomes <andremegafone@gmail.com>
 
