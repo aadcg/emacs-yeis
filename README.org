@@ -83,7 +83,7 @@ At the moment the following input methods are supported:
 | robin-russian         | US qwerty <-> russian ЙЦУКЕН  |
 | robin-russian-dvorak  | US dvorak <-> russian ЙЦУКЕН  |
 | robin-russian-workman | US workman <-> russian ЙЦУКЕН |
-| robin-greek           | US querty <-> Greek           |
+| robin-greek           | US qwerty <-> Greek           |
 
 It's trivial to add more. Let me know about your needs or, better yet, send me a
 patch.
