@@ -1,6 +1,6 @@
 ;; robin-packages.el --- Robin packages
 
-;; Copyright © 2020 André A. Gomes <andremegafone@gmail.com>
+;; Copyright © 2020, 2021 André A. Gomes <andremegafone@gmail.com>
 
 ;; This file is NOT part of GNU Emacs.
 
@@ -474,3 +474,51 @@
                       (":;y" ?ΰ)
                       (";<" ?«)
                       (";>" ?»))
+
+(robin-define-package "robin-portuguese-prefix"
+		      "Portuguese input method with prefix modifiers
+
+| effect     | prefix    | examples                   |
+|------------+-----------+----------------------------|
+| acute      | \\='      | \\='a -> á   \\='\\=' -> ´ |
+| grave      | \\=`      | \\=`a -> à                 |
+| circumflex | ^         | ^a -> â                    |
+| diaeresis  | \"        | \"u -> ü                   |
+| tilde      | ~         | ~a -> ã                    |
+| cedilla    | \\=' or , | \\='c -> ç   ,c -> ç       |
+"
+
+              ("'A" ?Á)
+              ("'E" ?É)
+              ("'I" ?Í)
+              ("'O" ?Ó)
+              ("'U" ?Ú)
+              ("'C" ?Ç)
+              ("'a" ?á)
+              ("'e" ?é)
+              ("'i" ?í)
+              ("'o" ?ó)
+              ("'u" ?ú)
+              ("'c" ?ç)
+              ("' " ?')
+              ("`A" ?À)
+              ("`a" ?à)
+              ("` " ?`)
+              ("^A" ?Â)
+              ("^E" ?Ê)
+              ("^O" ?Ô)
+              ("^a" ?â)
+              ("^e" ?ê)
+              ("^o" ?ô)
+              ("^ " ?^)
+              ("\"U" ?Ü)
+              ("\"u" ?ü)
+              ("\" " ?\")
+              ("~A" ?Ã)
+              ("~O" ?Õ)
+              ("~a" ?ã)
+              ("~o" ?õ)
+              ("~ " ?~)
+              (",c" ?ç)
+              (",C" ?Ç)
+              (",," ?,))

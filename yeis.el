@@ -1,6 +1,6 @@
 ;;; yeis.el --- Yeis's Emacs' Input Switcher  -*- lexical-binding: t; -*-
 
-;; Copyright © 2020 André A. Gomes <andremegafone@gmail.com>
+;; Copyright © 2020, 2021 André A. Gomes <andremegafone@gmail.com>
 
 ;; Version: 0.0.1
 ;; URL: https://github.com/aadcg/emacs-yeis
@@ -26,7 +26,9 @@
 
 ;; It pretends to:
 
-;; 1) Transform text as if it had been inserted by any non-CJK input method;
+;; 1) Transform text as if it had been inserted by any non-CJK input
+;; method;
+
 ;; 2) Auto set the input method and auto transform text as it's typed
 ;; (yeis-mode);
 
