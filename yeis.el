@@ -1,6 +1,6 @@
 ;;; yeis.el --- Yeis's Emacs' Input Switcher  -*- lexical-binding: t; -*-
 
-;; Copyright © 2020, 2021 André A. Gomes <andremegafone@gmail.com>
+;; Copyright © 2020, 2021, 2022 André A. Gomes <andremegafone@gmail.com>
 
 ;; Version: 0.0.1
 ;; URL: https://github.com/aadcg/emacs-yeis
@@ -100,7 +100,8 @@ The transformation acts on the region active, in case it exists."
 
 (define-minor-mode yeis-mode
   "Toggle automatic IM selection (Yeis mode)."
-  nil " Ye" nil
+  :global nil
+  :lighter " Ye"
   (if yeis-mode
       (add-hook 'post-self-insert-hook #'yeis-rules nil t)
     (remove-hook 'post-self-insert-hook #'yeis-rules t)))
