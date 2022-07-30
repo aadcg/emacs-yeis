@@ -1,27 +1,30 @@
 * Overview
 
-*Yeis*, pronounced yes, is a more advanced input method switcher for Emacs.
+*Yeis*, pronounced yes, is a more advanced input method switcher for
+Emacs.
 
 It pretends to:
 
-1) Transform text as if it had been inserted by any non-CJK input method;
-2) Auto set the input method and auto transform text as it's typed (yeis-mode);
+1) Transform text as if it had been inserted by any non-CJK input
+   method;
+2) Auto set the input method and auto transform text as it's typed
+   (yeis-mode);
 
 ** Demo
 
-Let's see it in action, for the sake of clarity. I'll be demonstrating it with
-the russian input method selected (ЙЦУКЕН).
+Let's see it in action, for the sake of clarity.  I'll be demonstrating
+it with the russian input method selected (ЙЦУКЕН).
 
 ** Manual Transformation
 
-Transform the previous word, the one to the left of the cursor, by calling
-=yeis-transform-previous-word=. You can either call it with M-x or you can set
-bind it to a key, such as C-| (see instructions below).
+Transform the previous word, the one to the left of the cursor, by
+calling =yeis-transform-previous-word=.  You can either call it with M-x
+or you can set bind it to a key, such as C-| (see instructions below).
 
 When you pass a prefix argument n, it transforms the last n words.
 
-The following commands are equivalent ways to transforming 3 words that come
-before the cursor.
+The following commands are equivalent ways to transforming 3 words that
+come before the cursor.
 
 - M-3 C-|
 - C-u 3 C-|
@@ -33,12 +36,12 @@ Notice that you can always toggle your input method by calling
 
 ** Yeis-mode
 
-By activating yeis-mode, you'll get auto transformation and auto input method
-selection. It follows a DWIM (do-what-I-mean) philosophy.
+By activating yeis-mode, you'll get auto transformation and auto input
+method selection.  It follows a DWIM (do-what-I-mean) philosophy.
 
-Note that this is still under development, therefore unwanted behavior will
-certainly happen. You can always call =yeis-transform-previous-word= to make the
-necessary corrections.
+Note that this is still under development, therefore unwanted behaviour
+will certainly happen.  You can always call
+=yeis-transform-previous-word= to make the necessary corrections.
 
 [[file:screenshots/yeismode.gif]]
 
@@ -48,30 +51,29 @@ necessary corrections.
 git clone https://github.com/aadcg/emacs-yeis.git
 #+end_src
 
-Please find in the table below the string that identifies the input method you
-want to use.
+Please find in the table below the string that identifies the input
+method you want to use.
 
-Here's what you need to add to your init.el:
+Here's what you need to add to your =init.el=:
 
 #+begin_src emacs-lisp
-  ;; yeis main file
-  (load-file "/fullpath/to/yeis.el")
+;; yeis main file (load-file "/fullpath/to/yeis.el")
 
-  ;; input methods' definitions
-  (load-file "/fullpath/to/robin-packages.el")
+;; input methods' definitions (load-file
+"/fullpath/to/robin-packages.el")
 
-  ;; loads the defined input methods
-  (load-file "/fullpath/to/x-leim-list.el")
+;; loads the defined input methods (load-file
+"/fullpath/to/x-leim-list.el")
 
-  ;; activate the desired input method, for instance robin-russian
-  (setq default-input-method "robin-russian")
-  (setq-default robin-current-package-name "robin-russian")
+;; activate the desired input method, for instance robin-russian (setq
+default-input-method "robin-russian") (setq-default
+robin-current-package-name "robin-russian")
 
-  ;; this is necessary if you want to use yeis minor mode
-  (setq yeis-path-plain-word-list "/fullpath/to/wordlist/of/this/repo")
+;; this is necessary if you want to use yeis minor mode (setq
+yeis-path-plain-word-list "/fullpath/to/wordlist/of/this/repo")
 
-  ;; since C-\ is bind to `toggle-input-method', this seems a good choice
-  (global-set-key (kbd "C-|") 'yeis-transform-previous-word)
+;; since C-\ is bind to `toggle-input-method', this seems a good choice
+(global-set-key (kbd "C-|") 'yeis-transform-previous-word)
 #+end_src
 
 * Input methods
@@ -85,56 +87,62 @@ At the moment the following input methods are supported:
 | robin-russian-workman | US workman <-> russian ЙЦУКЕН |
 | robin-greek           | US qwerty <-> Greek           |
 
-It's trivial to add more. Let me know about your needs or, better yet, send me a
-patch.
+It's trivial to add more.  Let me know about your needs or, better yet,
+send me a patch.
 
-/Please note that I have only tested yeis-mode for the first one on the above
-list./
+/Please note that I have only tested yeis-mode for the first one on the
+above list./
 
 * Roadmap
 
 - Add support for more input methods out of the box (trivial task);
-- Improve yeis-mode (namely it should take into account that users can make
-  typos);
+- Improve yeis-mode (namely it should take into account that users can
+  make typos);
 - Write unit tests (following a property-based philosophy);
 - Write integration tests with the most common words;
-- Better integration with GNU Aspell (can it check if a certain prefix exists in a
-  given dictionary?)
+- Better integration with GNU Aspell (can it check if a certain prefix
+  exists in a given dictionary?)
 
 * Rant about input methods
 
-If your way of life is to live inside of Emacs, then you know how annoying it is
-when you select a non QWERTY input method in your OS. Say you have the russian
-input method active. Then you go to Emacs, you hit C-g and the minibuffer greets
-you with:
+If your way of life is to live inside of Emacs, then you know how
+annoying it is when you select a non QWERTY input method in your OS.
+Say you have the russian input method active.  Then you go to Emacs, you
+hit C-g and the minibuffer greets you with:
 
 =C-п is undefined=
 
-Emacs wants us to have a QWERTY input method enabled. When in need of another
-one, we should make use of its multilingual features (=M-x set-input-method=).
-That way, keybindings will still work since keypresses prefixed by Meta or
-Control are escaped (i.e. not transformed). On the other hand, it is a fact that
-we can't (yet) do everything in Emacs. So, until that day of plenitude comes, we
-shall need to change the input method in the operating system we're running (say
-you want to write in Russian in your browser). A possible solution is to use
-IBus (the default input method framework for GNOME). Out of the box, you get
-input methods selected per application. Sweet! Some people have totally
-different approaches - take a look at [[https://github.com/a13/reverse-im.el][reverse-im]] and [[https://github.com/mrkkrp/fix-input][fix-input]]. I shall not even
-go in there.
+Emacs wants us to have a QWERTY input method enabled.  When in need of
+another one, we should make use of its multilingual features (=M-x
+set-input-method=).  That way, keybindings will still work since
+keypresses prefixed by Meta or Control are escaped (i.e. not
+transformed).  On the other hand, it is a fact that we can't (yet) do
+everything in Emacs.  So, until that day of plenitude comes, we shall
+need to change the input method in the operating system we're running
+(say you want to write in Russian in your browser).  A possible solution
+is to use IBus (the default input method framework for GNOME).  Out of
+the box, you get input methods selected per application.  Sweet!  Some
+people have totally different approaches - take a look at [[https://github.com/a13/reverse-im.el][reverse-im]] and
+[[https://github.com/mrkkrp/fix-input][fix-input]].  I shall not even go in there.
 
-Let's now talk about input methods within Emacs. It supports insertion of
-multilingual text through Quail (have a look at quail.el) - indeed, a beautiful
-piece of software, but it inherits unnecessary complexity when the users don't
-use a CJK input method. I found out is that there's a lighter alternative to
-Quail - Robin. The latter, provides transformation to and from any (non-CJK)
-input method out of the box!
+Let's now talk about input methods within Emacs.  It supports insertion
+of multilingual text through Quail (have a look at quail.el) - indeed, a
+beautiful piece of software, but it inherits unnecessary complexity when
+the users don't use a CJK input method.  I found out is that there's a
+lighter alternative to Quail - Robin.  The latter, provides
+transformation to and from any (non-CJK) input method out of the box!
 
-What Yeis wants to achieve within Emacs might be comparable to what [[https://xneur.ru][xneur]]
-achieves for GNU/Linux.
+What Yeis wants to achieve within Emacs might be comparable to what
+[[https://xneur.ru][xneur]] achieves for GNU/Linux.
+
+* COMMENT Think
+[[https://github.com/tmalsburg/guess-language.el][compare with this package]].
 
 * Thanks
 
 John Lawler for [[http://www-personal.umich.edu/~jlawler/wordlist.html][this english wordlist]].
+
+To get wordlists take a look [[http://app.aspell.net/create][here]].
 
 vlarya2 for [[https://pen4pals.com/en/10000-most-common-russian-words-spreadsheet][this russian wordlist]].
 
