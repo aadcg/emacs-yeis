@@ -73,10 +73,10 @@ position.
 
 The transformation acts on the region active, in case it exists."
   (interactive "p")
-  (let ((beg (if (region-active-p)
+  (let ((beg (if (use-region-p)
                  (region-beginning)
                (or (yeis-last-whitespace arg) (point-min))))
-        (end (if (region-active-p)
+        (end (if (use-region-p)
                  (region-end)
                (point))))
     (if current-input-method
